@@ -8,11 +8,11 @@ var isGameOver=false
 
 var ball={
     x:40,
-    y:300,
+    y:700,
     z:0,
-    dx:10,
+    dx:8,
     dy:5,
-    r:20
+    r:10
 }
 
 var thanhchan ={
@@ -26,12 +26,12 @@ var thanhchan ={
 }
 
 var gach={
-    offset:25,
+    offset:100,
     margin:25,
-    width:70,
+    width:40,
     height:20,
-    isRow:3,
-    isColumn:5
+    isRow:7,
+    isColumn:12
 }
 
 var listsogach=[]
@@ -39,7 +39,7 @@ for (let index = 0; index < gach.isRow; index++) {
     for (let index1 = 0; index1 < gach.isColumn; index1++) {
         listsogach.push({
             offset:gach.offset+index1*(gach.width+gach.margin),
-            y:gach.height+index*(gach.height+gach.margin+60),
+            y:100+gach.height+index*(gach.height+gach.margin),
             width:gach.width,
             height:gach.height,
             isBranks:false
@@ -52,7 +52,7 @@ for (let index = 0; index < gach.isRow; index++) {
 function draWBall(){
     context.beginPath()
     context.arc(ball.x,ball.y,ball.r,ball.z,Math.PI*2)
-    context.stroke()
+    
     context.fillStyle="red"
     context.fill()
     context.closePath()
@@ -76,7 +76,7 @@ function updateBall(){
 function contro(){
     context.beginPath()
     context.rect(thanhchan.x,thanhchan.y,thanhchan.width,thanhchan.height)
-    context.stroke()
+    
     context.fillStyle="red"
     context.fill()
     context.closePath()
@@ -115,7 +115,8 @@ function setControleft(){
 }
 // xử lý va chạm của thanh trượt và bóng
 function vaCham(){
-    if(thanhchan.x < ball.x && thanhchan.x+thanhchan.width> ball.x && ball.y + ball.r >canvar.height-thanhchan.height){
+    if(thanhchan.x <= ball.x && thanhchan.x+thanhchan.width>= ball.x && ball.y + ball.r >=canvar.height-thanhchan.height
+        ){
         ball.dy=-ball.dy
     }
 }
@@ -129,7 +130,7 @@ for (let index = 0; index<listsogach.length; index++) {
     if(!listsogach[index].isBranks){
         context.beginPath()
         context.rect(listsogach[index].offset,listsogach[index].y,listsogach[index].width,listsogach[index].height)
-        context.stroke()
+        
         context.fillStyle="red"
         context.fill()
         context.closePath()
@@ -141,7 +142,9 @@ function setVadapGach(){
         if(!b.isBranks){
             // console.log(ball.y + ball.r)
             // console.log(b.y)
-            if(b.offset < ball.x && b.offset+b.width> ball.x && ball.y + ball.r <= b.y+2*b.height+gach.margin){
+            if(b.offset < ball.x && b.offset+b.width> ball.x && ball.y + ball.r <= b.y+2*b.height+gach.margin
+                && ball.y + ball.r >= b.y
+                ){
                 ball.dy=-ball.dy
                 b.isBranks=true
                 console.log("thành công")
