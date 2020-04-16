@@ -8,18 +8,18 @@ var isGameOver=false
 
 var ball={
     x:40,
-    y:700,
+    y:120,
     z:0,
     dx:8,
     dy:5,
-    r:10
+    r:7
 }
 
 var thanhchan ={
     x:0,
-    y:canvar.height-25,
+    y:canvar.height-30,
     width:200,
-    height:25,
+    height:30,
     speed:20,
     isright:false,
     isleft:false
@@ -29,8 +29,8 @@ var gach={
     offset:100,
     margin:25,
     width:40,
-    height:20,
-    isRow:7,
+    height:40,
+    isRow:4,
     isColumn:12
 }
 
@@ -39,7 +39,7 @@ for (let index = 0; index < gach.isRow; index++) {
     for (let index1 = 0; index1 < gach.isColumn; index1++) {
         listsogach.push({
             offset:gach.offset+index1*(gach.width+gach.margin),
-            y:100+gach.height+index*(gach.height+gach.margin),
+            y:30+gach.height+index*(gach.height+gach.margin),
             width:gach.width,
             height:gach.height,
             isBranks:false
@@ -115,9 +115,15 @@ function setControleft(){
 }
 // xử lý va chạm của thanh trượt và bóng
 function vaCham(){
-    if(thanhchan.x <= ball.x && thanhchan.x+thanhchan.width>= ball.x && ball.y + ball.r >=canvar.height-thanhchan.height
+    if(thanhchan.x <= ball.x && thanhchan.x+thanhchan.width>= ball.x && ball.y+ball.r >=thanhchan.y    
         ){
-        ball.dy=-ball.dy
+            if(ball.y >=thanhchan.y+ball.r ){
+                ball.dx=-ball.dx
+            }else{
+                ball.dy=-ball.dy
+            }
+            
+       
     }
 }
 // vẽ list gạch
@@ -142,13 +148,17 @@ function setVadapGach(){
         if(!b.isBranks){
             // console.log(ball.y + ball.r)
             // console.log(b.y)
-            if(b.offset < ball.x && b.offset+b.width> ball.x && ball.y + ball.r <= b.y+2*b.height+gach.margin
-                && ball.y + ball.r >= b.y
-                ){
-                ball.dy=-ball.dy
+            if(b.offset <= ball.x && b.offset+b.width>= ball.x && ball.y-ball.r<=b.y+b.height && ball.y+ball.r>=b.y){
+                    if(ball.y+ball.r<=b.y+b.height && ball.y-ball.r>=b.y){
+                        ball.dx=-ball.dx
+                        }else{
+                            ball.dy=-ball.dy
+                        }
+               
                 b.isBranks=true
-                console.log("thành công")
             }
+    
+            
         }
     })
 
@@ -175,7 +185,7 @@ function draw(){
         setVadap()
         setVadapGach()
         updateBall()        
-        if(ball.y==canvar.height-ball.r){
+        if(ball.y>canvar.height-ball.r){
             isGameOver=true
         }
         requestAnimationFrame(draw)
